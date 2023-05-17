@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <div id="app">
+    <cpname>
+      <!--目的是在父组件里获取子组件的数据，除了以下的方法，还可以通过自定义事件的方式来获取-->
+      <!--这个是固定的写法slot-scope-->
+      <template slot-scope="Twq">
+        <!--页面显示效果：java * C * python * C++ * Go * C#-->
+        <span>{{Twq.twq.join(' * ')}}</span>
+      </template>
+    </cpname>
+  </div>
+  <template id="cpnid">
+    <div>
+      <slot :twq="pLanguages">
+        <ul>
+          <li v-for="item in pLanguages">{{item}}</li>
+        </ul>
+      </slot>
+    </div>
+  </template>
+  <script src="../../js/vue.js"></script>
+  <script>
+  const app = new Vue({
+    el: '#app', //用于挂宰要管理的元素
+    data: {
+      message: '你好哇，twq'
+    },
+    components:{
+      cpname:{
+        template:'#cpnid',
+        data(){
+          return{
+            pLanguages:['java','C','python','C++','Go','C#']
+          }
+        }
+      }
+    }
+  })
+  </script>
+</body>
+</html>

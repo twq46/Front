@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <div id="app">
+    <!--  父组件绑定子组件自定义的点击事件，并定义新的事件cpnclick用于接收子组件传来的数据  -->
+    <cpname v-on:itemclick="cpnclick"></cpname>
+  </div>
+  <template id="cpnid">
+    <div>
+      <button v-for="item in catagries" @click="btnclick(item)">{{item.name}}</button>
+    </div>
+  </template>
+  <script src="../../js/vue.js"></script>
+  <script>
+    const cpn ={
+      template:'#cpnid',
+      data(){
+        return{
+          catagries:[
+            {id:'aaa',name:'热门推荐'},
+            {id:'bbb',name:'手机数码'},
+            {id:'ccc',name:'家用家电'},
+            {id:'ddd',name:'电脑办公'}]
+        }
+      },
+      methods:{
+        btnclick(item){
+          console.log(item.name);
+          //子组件向父组件发射一个名为itemclick点击事件，传递的参数为item
+          this.$emit('itemclick',item)
+        }
+      }
+    }
+    const app = new Vue({
+      el: '#app', //用于挂宰要管理的元素
+      data: {
+        message: '你好哇，twq'
+      },
+      components:{
+        'cpname':cpn
+      },
+      methods:{
+        cpnclick(item){
+          console.log('子组件传来数据')
+          console.log(item);
+        }
+      }
+    })
+  </script>
+</body>
+</html>

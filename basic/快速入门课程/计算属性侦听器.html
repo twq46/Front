@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="nav">
+        姓：<input v-model="firstname">
+        名：<input v-model="lastname">
+        <div>{{fullname}}</div>
+        <div>{{count}}</div>
+    </div>
+    <script>
+        new Vue({
+            el: "#nav",
+            data: {
+                fistname: '',
+                lastname: '',
+                count: 0
+            },
+            /*计算属性*/
+            computed: {
+                fullname: function () {
+                    return this.firstname + ' ' + this.lastname
+                }
+            },
+            /*侦听*/
+            watch: {
+                fullname: function () {
+                    this.count++
+                },
+            }
+        })
+    </script>
+
+</body>
+
+</html>

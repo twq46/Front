@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<!--使用webpack打包工具的这里就可以不用写这些引入，只需要引入打包之后的文件就可以-->
+<!--<script src="./src/main.js" type="module"></script>-->
+<!--<script src="./src/mathUtils.js" type="module"></script>-->
+
+<!--
+下面的打包命令将main.js打包到dist目录下的bundle.js中,这里不需要打包mathUtils.js，
+是因为在main.js中有引入mathUtils.js的路径，webpack会自动找到该依赖
+webpack ./src/main.js -o ./dist/bundle.js
+
+如果在webpack.config.js文件中配置了入口和出口，则直接在终端中输入
+webpack就可以打包
+-->
+
+<!--在终端输入npm init，会生成package.json文件-->
+
+<script src="./dist/bundle.js"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id='app'>
+
+    <span v-if="isUser">
+      <label for="">账号登陆</label>
+      <!-- 解决复用问题的方法就是增加一个key关键字，如果key关键字不一样
+        则vue就不会对数据进行复用 -->
+      <input type="text" id="userLogin" placeholder="用户登陆" key="userName">
+    </span>
+
+    <span v-else>
+      <label for="">邮箱登陆</label>
+      <input type="text" id="emailLogin" placeholder="邮箱登陆" key="email">
+    </span><br>
+    <!-- 这段代码存在一些问题，就是当
+    输入框中输入有文字之后，点击切换按钮输入框里的文字
+    不会自动清除主要是vue底层会对数据进行复用的问题 -->
+    <button @click="switchA">切换类型</button>
+  </div>
+  <script src="../../js/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        message: '你好',
+        isUser: true
+      },
+      methods: {
+        switchA() {
+          this.isUser = !this.isUser;
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

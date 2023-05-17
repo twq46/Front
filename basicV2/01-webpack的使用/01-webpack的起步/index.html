@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<!--使用webpack打包工具的这里就可以不用写这些引入，只需要引入打包之后的文件就可以-->
+<!--<script src="./src/main.js" type="module"></script>-->
+<!--<script src="./src/mathUtils.js" type="module"></script>-->
+<!--
+将main.js打包到dist目录下的bundle.js中,这里不需要打包mathUtils.js，
+是因为在main.js中有引入mathUtils.js的路径，webpack会自动找到该依赖
+webpack ./src/main.js -o ./dist/bundle.js
+-->
+<script src="./dist/bundle.js/main.js"></script>
+</body>
+</html>

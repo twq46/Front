@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id='app'>{{fullName}}</div>
+  <script src="../../js/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        message: '你好',
+        firstName: 'tang',
+        lastName: 'Bohu',
+      },
+      computed: {
+        /*fullName():{
+          return this.firstName + ' ' + this.lastName;
+        },*/
+        //计算属性一般是没有set方法，也被称为只读属性,所以可以简写为以上形式
+        fullName: {
+          set: function (newValue) {//newValue的值为：tang QiuXiang
+            let name = newValue.split(' ');//以空格切分
+            this.firstName = name[0];
+            this.lastName = name[1];
+          },
+          get: function () {
+            //return 'ags'//界面会显示ags
+            return this.firstName + ' ' + this.lastName;
+          }
+        }
+      }
+    })
+    app.fullName = "tang QiuXiang"
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <div id="app">
+    <cpname></cpname>
+    <!-- 这里必须是ref属性   -->
+    <cpname ref="tbh"></cpname>
+    <button @click="btnClick">按钮</button>
+  </div>
+  <template id="cpn">
+    <div>
+      我是子组件
+    </div>
+  </template>
+  <script src="../../js/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app', //用于挂宰要管理的元素
+      data: {
+        message: '你好哇，twq'
+      },
+      methods:{
+        btnClick(){
+          //1.通过$children拿到子组件的方法及属性
+          //父组件里有定义了两个子组件，这样可以拿到第一个子组件内的name属性对应的值
+          console.log(this.$children[0].name);
+          //拿到第二个组件内的methods方法
+          console.log(this.$children[1].showMessageTwq());
+          //上述通过$children拿到的子组件内部的方法以及属性的方式，在某些时候
+          //如果需求改变中间新增了几个组件，则$children的下标值会发生变化
+          //这个时候就会引入第二种方式
+          console.log('-------------------')
+          //2.通过$refs来获取指定子组件的方法及属性
+          //通过$refs获取子组件的属性及方法，必须对要获取的子组件设置一个ref属性，否则拿到的就是空值
+          console.log(this.$refs);
+          console.log(this.$refs.tbh.name);
+          console.log(this.$refs.tbh.showMessageTwq());
+        }
+      },
+      components:{
+        cpname:{
+          template:'#cpn',
+          methods:{
+            showMessageTwq(){
+              console.log('showMessageTwq')
+            }
+          },
+          data(){
+            return{
+              name:'cpn子组件的name'
+            }
+          }
+        }
+      }
+    })
+  </script>
+</body>
+</html>

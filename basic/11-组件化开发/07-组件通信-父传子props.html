@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <div id="app">
+    <!-- 父组件的数据通过v-bind绑定给子组件的属性
+     下面这样绑定之后，子组件的cmovies和cmessage属性
+     就拿到了父组件movies和message内的数据-->
+    <cpn  :cmessage="message"></cpn>
+  </div>
+  <template id="cpn">
+    <div>
+      <ul>
+        <li v-for="item in cmovies">{{item}}</li>
+      </ul>
+      <h2>{{cmessage}}</h2>
+    </div>
+  </template>
+  <script src="../../js/vue.js"></script>
+  <script>
+    //父传子：props
+    const cpn = {
+      template:'#cpn',
+      //1.通过数组的方式定义属性
+      //props:['cmovies','cmessage'],
+
+      //2.通过对象方式定义属性
+      props:{
+        //1.类型限制
+        //cmovies:Array,//要求父组件传给cmovies的数据必须是一个数组
+        //cmessage:String,
+
+        //2.提供一些默认值，以及必传值
+        cmessage:{
+          type:String,
+          default:'aaaaaa',//当父组件没有给cmessage传递数据的时候，cmessage默认值为aaaaaa
+          required:true,//表示父组件必须要像子组件传递cmessage的值，否则会报错
+        },
+        //类型是对象或者数组时，默认值必须是一个函数
+        cmovies:{
+          type:Array,
+          //default: []//这种写法在vue2.5.17以下是不会报错的
+          //这样就不会报错
+          default(){
+            return []
+          }
+        }
+      },
+      data(){
+        return{
+
+        }
+      }
+    }
+    const app = new Vue({
+      el: '#app', //用于挂宰要管理的元素
+      data: {
+        message: '你好哇，twq',
+        movies:['海贼王','海王','海尔兄弟']
+      },
+      components:{
+        //语法糖注册的写法
+        // 'cpn':cpn
+        //上述写法在ES6中的增强写法
+        cpn
+      }
+    })
+  </script>
+</body>
+</html>

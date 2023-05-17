@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id='app'>
+    <div v-on:click="divClick">
+      asasdfasdfas
+      <!--1. .stop修饰符的使用 -->
+      <!-- 由于这个按钮处于div里面所以点击按钮
+    也会触发div的点击事件，要想使得按钮和div事件互不影响，可以使用.stop修饰符 -->
+      <button v-on:click.stop="btnClick">
+        按钮1
+      </button>
+    </div>
+    <br>
+
+    <!--2. .prevent修饰符的使用 -->
+    <form action="baidu">
+      <!-- 这里如果没有写.prevent点击提交之后，表单会自动提交，写了之后就不会自动提交表单 -->
+      <input type="submit" value="提交" @click.prevent="submitclick">
+    </form>
+
+    <!-- 3. .监听键盘的某个键的点击 -->
+    <!-- 判断键盘的键帽是否被点击 -->
+    <input type="text" @keyup="keyUp"><br>
+    <!-- 判断键盘的回车键是否被点击 -->
+    <input type="text" @keyup.enter="keyUp1">
+  </div>
+  <script src="../../js/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        message: '你好'
+      },
+      methods: {
+        divClick() {
+          console.log("div被点击")
+        },
+        btnClick() {
+          console.log("btn被点击")
+        },
+        submitclick() {
+          console.log('提交')
+        },
+        keyUp() {
+          console.log('键帽被点击')
+        },
+        keyUp1(){
+          console.log('回车被点击')
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

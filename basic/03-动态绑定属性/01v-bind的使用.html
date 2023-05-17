@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id='app'>
+    <!-- 错误写法 -->
+    <!-- <img src="{{imageUrl}}" alt=""> -->
+    <!--  当写了v-bind之后src里的imageUrl就是一个变量，而Vue实例
+    会去解析这个变量，并得到其值
+    v-bind可以不写，直接写冒号-->
+    <img v-bind:src="imageUrl" alt="">
+  </div>
+  <script src="../../js/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        message: '你好',
+        imageUrl:'https://tse1-mm.cn.bing.net/th/id/OIP-C.YKoZzgmubNBxQ8j-mmoTKAHaEK?w=329&h=185&c=7&r=0&o=5&pid=1.7'
+      }
+    })
+  </script>
+</body>
+
+</html>

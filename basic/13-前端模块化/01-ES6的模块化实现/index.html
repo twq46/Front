@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<!--加上type之后，每个js都属于单独的一个模块，
+并且里面的全局变量即使重名也不会相互影响-->
+<!--如果别的模块需要使用另外一个模块的内容，需要通过导出和倒入的方式进行，否则无法访问其他模块的内容-->
+<script src="aaa.js" type="module"></script>
+<script src="bbb.js" type="module"></script>
+<script src="mmm.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <!-- <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+</head>
+
+<body>
+    <!-- alt shift f 格式化代码 -->
+    <!-- 以下相当于一个挂在点 -->
+    <div id="root"></div>
+
+    <script>
+        new Vue({
+            el: "#root",
+            template: '<h1> hello {{msg}} </h1>',
+            data: {
+                msg: " world"
+            }
+        })
+    </script>
+</body>
+
+</html>

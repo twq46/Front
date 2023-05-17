@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+
+</head>
+
+<body>
+    <div id="nav">
+        <input v-model="inputValue">
+        <button @click="handleSubmit">提交</button>
+        <ul>
+            <!-- :content="item"父组件向子组件传值通过属性来传 -->
+            <!-- @delete="handleDelete" 父组件接收子组件传递的delete信息和index,并进行删除操作 -->
+            <todo-item v-for="(item,index) of list" :key="index" :content="item" :index="index" @delete="handleDelete">
+            </todo-item>
+        </ul>
+        <!-- 上述自定义组件的另一种写法 -->
+        <!-- <ul>
+            <li v-for="item of list" :key="item">{{item}}</li>
+        </ul> -->
+
+    </div>
+    <script>
+        /*推荐使用 这样定义的一个组建被称为全局组件*/
+        Vue.component('todo-item', {
+            props: ['content', 'index'],
+            /*子组件接收传递的值*/
+            template: '<li @click="handleClick">{{content}}</li>',
+            /*一个组件也是一个实例，里面可以包含methods,data等*/
+            /*当点击list中某一个值的时候，子组件向父组件发布delete的信息，并传递当前点击的list中的元素的下标*/
+            methods: {
+                handleClick: function () {
+                    this.$emit('delete', this.index)
+                }
+            }
+        })
+        /*定义一个局部的组件，必须要在Vue中进行注册
+        var Todoitem = {
+            template: '<li>item</li>'
+        }*/
+        new Vue({
+            el: "#nav",
+            /* components: {
+                 'todo-item': Todoitem
+             },*/
+            data: {
+                inputValue: '',
+                list: []
+            },
+            methods: {
+                handleSubmit: function () {
+                    this.list.push(this.inputValue)
+                    this.inputValue = ''
+                },
+                /*删除list中下标为index的数据*/
+                handleDelete: function (index) {
+                    this.list.splice(index, 1)
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

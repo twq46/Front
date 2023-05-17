@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id='app'>
+    <ul>
+      <!-- 在遍历对象的过程中，如果只是获取一个值，那么获取到的是value -->
+      <li v-for="item in info">{{item}}</li>
+    </ul>
+
+    <ul>
+      <!-- 获取key和value 格式:(value，key) -->
+      <li v-for="(value,key) in info">{{key}}:{{value}}</li>
+    </ul>
+
+    <ul>
+      <li v-for="(value,key,index) in info">{{index}} {{key}}: {{value}}</li>
+    </ul>
+
+    <!-- 遍历数组 -->
+    <ul>
+      <!-- 绑定key之后可以提高数组增删的效率 -->
+      <li v-for="item in list" :key="item">{{item}}</li>
+    </ul>
+  </div>
+  <script src="../../js/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        message: '你好',
+        info:{
+          name:'tbh',
+          age:'18',
+          height:'1.9'
+        },
+        list:['a','b','c','d','e'],
+      }
+    })
+    //splice原本是截取的作用，splice(2,2)表示重下表为2的位置开始，截取两个元素
+    app.list.splice(2,0,'F')//会在下标为2的元素的位置插入字符F
+    //splice作用：删除元素/插入元素/替换元素
+    //删除元素：第二参数决定你要删除的元素的个数，如果只有一个参数，就删除该参数后面的所有元素
+    app.list.splice(1,2)//从下表为1开始，删除两个元素
+    //增添也可以理解为替换
+    app.list.splice(1,3,'F','G','H','I')//从下表为1开始先删除3个元素，然后又从1开始增添四个元素
+
+    //注意：通过索引值修改数组中的元素,在dom中不会显示，也就是vue不会在dom中去刷新修改之后的结果
+    this.letters[0] = 'bbbb';
+
+  </script>
+</body>
+
+</html>

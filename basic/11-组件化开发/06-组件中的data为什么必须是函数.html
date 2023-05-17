@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <div id="app">
+    <!-- 使用函数的原因就是当组件有多个的时候(如下有三个一样的组件)，函数能保证各
+    个组件之间的值互不影响，也就是函数每次返回的对象，在内存中的存储地址是不一样的，也就是不是同一个对象
+    所以每个组件里面的值也互不影响-->
+    <cpn></cpn>
+    <cpn></cpn>
+    <cpn></cpn>
+  </div>
+  <template id="cpn">
+    <div>
+      <h2>当前的值为：{{count}}</h2>
+      <button @click="jiajia">+</button>
+      <button @click="jianjian">-</button>
+    </div>
+  </template>
+  <script src="../../js/vue.js"></script>
+  <script>
+    //如果想要使得每次返回的是同一个对象，也就是多个计数器，无论点击
+    //哪个计数器的加号或者减号，其他计数器的值也会跟着改变，可以使用const来定义
+    const obj = {
+      count:0
+    }
+
+    Vue.component('cpn',{
+      template:`#cpn`,
+      data(){
+        //1.这里三个组件返回的是不同的对象，也因此点击一个计数器的加号或者减号并不会影响其他计数器
+        // return {
+        //   count:0
+        // }
+        //2.这里虽然有三个组件但是由于obj是const定义的对象，所以三个组件返回对象
+        //是一样的，也就因此，点击任何一个计数器的加号或者减号，其他计数器的值也会发生改变
+        return obj;
+      },
+      methods:{
+        jiajia(){
+          this.count++;
+        },
+        jianjian(){
+          this.count--;
+        }
+      }
+
+    })
+  const app = new Vue({
+    el: '#app', //用于挂宰要管理的元素
+    data: {
+      message: '你好哇，twq'
+    }
+  })
+  </script>
+</body>
+</html>

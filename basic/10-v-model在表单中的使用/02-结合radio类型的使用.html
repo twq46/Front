@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id='app'>
+    <!-- 当name相同的时候表示一个组里每次只能选择一个 -->
+    <!-- 如果v-model绑定了同一个属性，name不写也可以实现一个组里每次只能选择一个 -->
+    <!-- 实现点击哪个按钮，就将选中按钮的value值传递给sex变量，并显示 -->
+    <!-- 把表单放在label中的目的就是当点击文字的时候，可以直接选中该选项
+    为了让label生效，表单中需要有id属性，并且和label中的for的值相同 -->
+    <label for="male">
+      <input type="radio" id="male" name="sex" value="男" v-model="sex">男
+    </label>
+    <label for="feamle">
+      <input type="radio" id="feamle" name="sex" value="女" v-model="sex">女
+    </label>
+    
+    <h2>您选择的性别是：{{sex}}</h2>
+  </div>
+  <script src="../../js/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        message: '你好',
+        sex:''
+      }
+    })
+  </script>
+</body>
+
+</html>

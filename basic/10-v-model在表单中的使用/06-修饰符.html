@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id='app'>
+    <label for="">
+      <!-- 1.修饰符：lazy -->
+      <!-- 直接写v-model表示实时的绑定，也就是同时变化，如果不想要
+      实时绑定，也就是在表单输入文字敲回车之后message的值才发生变化就可以使用
+      .lazy修饰符 -->
+      <input type="text" v-model.lazy="message"><br>
+      
+
+      <!-- 2.修饰符：number -->
+      <!-- type="number"表示输入的只能是数字，但是表单在处理的时候
+      会将其自动转换为字符串类型，所以可以通过number修饰符保证输入的是数字类型 -->
+      <input type="number" v-model.number="age">
+      <h2>{{age}}-{{typeof age}}</h2><br>
+
+      <!-- 3.修饰符：trim -->
+      <!-- 如果表单输入的字符的头部和尾部有空格则name1中也会有空格，
+        为了去掉首尾的空格(字符串中间的空格无法用trim删除)，可以使用trim修饰符
+       -->
+      <input type="text" v-model.trim="name1">
+      <h2>{{name1}}</h2>
+    </label>
+    <h2>{{message}}</h2>
+  </div>
+  <script src="../../js/vue.js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        message: '你好',
+        age:0,
+        name1:''
+      }
+    })
+  </script>
+</body>
+
+</html>

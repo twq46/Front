@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id='app'>
+    <!-- 组件的使用 -->
+    <my-cpn></my-cpn>
+    <my-cpn></my-cpn>
+  </div>
+  <script src="../../js/vue.js"></script>
+  <script>
+    //ES6中使用``表示字符串，里面可以换行，tab键上面的符号
+    //1.创建组件的构造器对象
+    const cpnC = Vue.extend({
+      template:
+      `
+      <div>
+        <h2>我是标题</h2>
+        <p>我是内容，哈哈哈</p>
+        <p>我是内容，呵呵呵</p>
+      </div>
+      `
+    })
+    //2.注册组件（全局组件，意味着可以在多个Vue的实例下面使用）
+    //第一个参数名是使用组件时的标签名，参数名必须用单引号给引起来，否则会报错
+    Vue.component('my-cpn',cpnC)
+
+    const app = new Vue({
+      el: '#app',
+      data: {
+        message: '你好'
+      },
+      //在Vue实例中创建的组件就是局部的组件
+      //components:{
+        //cpn使用组件时的标签名
+       // cpn:cpnC
+      //},
+    })
+  </script>
+</body>
+
+</html>

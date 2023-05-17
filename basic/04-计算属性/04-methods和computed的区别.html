@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id='app'>
+    <!-- 使用函数来调用，用四次，函数就会被调用四次 -->
+    <h2>{{getFullName()}}</h2>
+    <h2>{{getFullName()}}</h2>
+    <h2>{{getFullName()}}</h2>
+    <h2>{{getFullName()}}</h2>
+    <!-- 使用计算属性，用四次，属性只会被调用一次 -->
+    <h2>{{fullName}}</h2>
+    <h2>{{fullName}}</h2>
+    <h2>{{fullName}}</h2>
+    <h2>{{fullName}}</h2>
+  </div>
+  <script src="../../js/vue. js"></script>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        message: '你好',
+        firstName:'Twq',
+        lastName:'Bohu'
+      },
+      methods:{
+        getFunllName:function(){
+          console.log('getFullName');//这里函数调用几次，就会打印几次
+          return this.firstName + ' ' + this.lastName;
+        }
+      },
+      //vue内部为computed的计算属性作了一层缓存，它会观察内部是否放生变化
+      //比如下面firstName，firstName有没有发生变化，如果没有发生变化会直接将属性返回过去
+      computed:{
+        fullName: function(){
+          console.log('fullName');//这里如果firstName和lastName没有发生改变不管计算属性用多少次，这里只会打印一次
+          return this.firstName + ' ' + this.lastName;
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
