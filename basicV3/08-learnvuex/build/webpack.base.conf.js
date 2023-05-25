@@ -22,13 +22,10 @@ module.exports = {
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath
   },
-  //给文件起别名
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       '@': resolve('src'),
-      'assets':resolve('src/assets'),
-      'components':resolve('src/components'),
     }
   },
   module: {

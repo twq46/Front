@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<script>
+  //使用setTimeout
+  setTimeout(()=>{
+    console.log('Hello World');
+  },1000)
+
+  //参数-> 函数(resolve,reject)
+  //resolve,reject 本身他们又是函数
+  //如果这样去调用函数的话，会出现回调地狱，代码看着不优雅
+  // new Promise((resolve, reject) => {
+  //   //1秒后打印五次Hello World
+  //   setTimeout(()=>{
+  //     console.log('Hello World');
+  //     console.log('Hello World');
+  //     console.log('Hello World');
+  //     console.log('Hello World');
+  //     //1秒后打印五次Hello Vuejs
+  //     setTimeout(()=>{
+  //       console.log('Hello Vuejs');
+  //       console.log('Hello Vuejs');
+  //       console.log('Hello Vuejs');
+  //       console.log('Hello Vuejs');
+  //       //1秒后打印五次Hello reject
+  //       setTimeout(()=>{
+  //         console.log('Hello reject');
+  //         console.log('Hello reject');
+  //         console.log('Hello reject');
+  //         console.log('Hello reject');
+  //       },1000)
+  //     },1000)
+  //   },1000)
+  // })
+
+  //上述代码的优雅写法，链式编程
+  new Promise((resolve, reject) => {
+    setTimeout(()=>{
+      resolve()//这里调用resolve函数之后，系统就会自动调用then函数
+    },1000)
+  }).then(()=>{
+    console.log('Hello World');
+    console.log('Hello World');
+    console.log('Hello World');
+    console.log('Hello World');
+
+    return new Promise((resolve, reject) => {
+      setTimeout(()=>{
+        resolve()
+      },1000)
+    })
+  }).then(()=>{
+    console.log('Hello Vuejs');
+    console.log('Hello Vuejs');
+    console.log('Hello Vuejs');
+    console.log('Hello Vuejs');
+
+    return new Promise((resolve, reject) => {
+      setTimeout(()=>{
+        resolve()
+      },1000)
+    })
+  }).then(()=>{
+    console.log('Hello reject');
+    console.log('Hello reject');
+    console.log('Hello reject');
+    console.log('Hello reject');
+  })
+</script>
+</body>
+</html>

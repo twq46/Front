@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<script>
+  Promise.all([
+      //这里相当与有两个请求
+      // new Promise((resolve, reject) => {
+      //   $.ajax({
+      //     url:'url1',
+      //     success:function(data){
+      //       resolve(data)
+      //     }
+      //   })
+      // }),
+      // new Promise((resolve, reject) => {
+      //   $.ajax({
+      //     url:'url2',
+      //     success:function(data){
+      //       resolve(data)
+      //     }
+      //   })
+      // })
+      //为了更好模拟两个请求，这里使用setTimeout来模拟网络请求
+
+      new Promise((resolve, reject) => {
+        setTimeout(()=>{
+          resolve('result1')
+        },2000)
+      }),
+      new Promise((resolve, reject) => {
+        setTimeout(()=>{
+          resolve('result2')
+        },1000)
+      })
+  ]).then((res)=>{
+    console.log(res);//输出结果为["result1","result2"]
+    console.log(res[0]);//result1
+  })
+</script>
+</body>
+</html>
