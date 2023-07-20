@@ -8,11 +8,6 @@ const category = ()=> import('views/category/components/category')
 const cart = ()=> import('views/cart/components/cart')
 const profile = ()=> import('views/profile/components/profile')
 const detail = ()=> import('views/detail/Detail')
-const detailparma = ()=> import('views/detail/childComps/DetailParamInfo')
-const detailcomment = ()=> import('views/detail/childComps/DetailCommentInfo')
-const goodlist = ()=> import('components/content/goods/GoodsList')
-
-
 //2.创建router
 const routes = [
   {

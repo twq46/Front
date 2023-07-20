@@ -1,10 +1,13 @@
 <template>
   <div id="detail">
     <!--导航栏   -->
-    <DetailNavBar class="detail-nav"></DetailNavBar>
+    <DetailNavBar class="detail-nav" @detailTitleItem="titleClick" ref="detailNavBar"></DetailNavBar>
+
     <Scroll class="content"
             @pullingUp="pullingUp"
-            :pull-up-load="true" ref="detailScroll">
+            @scroll="detailScroll"
+            :probe-type="3"
+            :pull-up-load="true" ref="scroll">
       <!--轮播图数据-->
       <DetailSwiper :top-images-swiper="topImages"></DetailSwiper>
       <!--商品信息展示-->
@@ -15,12 +18,15 @@
       <DetailGoodsInfo :detail-info="detailInfo"></DetailGoodsInfo>
 
       <!--商品参数信息-->
-      <DetailParamInfo :param-info="paramInfo"></DetailParamInfo>
+      <DetailParamInfo :param-info="paramInfo" ref="param"></DetailParamInfo>
       <!--评论信息-->
-      <DetailCommentInfo :comment-info="commentInfo"></DetailCommentInfo>
+      <DetailCommentInfo :comment-info="commentInfo" ref="comment"></DetailCommentInfo>
       <!--展示推荐信息-->
-      <GoodsList :goods-list="recommends"></GoodsList>
+      <GoodsList :goods-list="recommends" ref="recommend"></GoodsList>
     </Scroll>
+    <DetailBottomBar @carClick="addCarToClick"></DetailBottomBar>
+    <BackTop v-show="backTopShow" @click.native="backTopClick"></BackTop>
+<!--    <Toast></Toast>-->
   </div>
 </template>
 
@@ -32,14 +38,19 @@ import DetailShopInfo from "@/views/detail/childComps/DetailShopInfo";
 import DetailGoodsInfo from "@/views/detail/childComps/DetailGoodsInfo";
 import DetailParamInfo from "@/views/detail/childComps/DetailParamInfo";
 import DetailCommentInfo from "@/views/detail/childComps/DetailCommentInfo";
+import DetailBottomBar from "@/views/detail/childComps/DetailBottomBar";
+
+// import Toast from "@/components/common/toast/Toast";
 
 import GoodsList from "@/components/content/goods/GoodsList";
-
 
 import Scroll from "@/components/common/scroll/Scroll";
 
 import {getDetail,Goods,Shop,GoodsParam,getRecommend} from "@/network/detail";
 import {debounce} from "common/utils"
+
+import {backTopMixin} from "@/common/mixin";
+
 export default {
   name: "detail",
   components:{
@@ -50,10 +61,15 @@ export default {
     DetailGoodsInfo,
     DetailParamInfo,
     DetailCommentInfo,
+    DetailBottomBar,
+
+    // Toast,
 
     GoodsList,
     Scroll
   },
+  //使用混入对象
+  mixins:[backTopMixin],
   data(){
     return{
       iid:null,
@@ -64,16 +80,17 @@ export default {
       detailInfo: {},
       paramInfo:{},
       commentInfo:{},
-      recommends:[]
+      recommends:[],
+      themTopYs:[],
+      toastMessage:'',
+      show:false,
     }
   },
   created() {
     this.iid = this.$route.params.iid
     //请求详情数据
     getDetail(this.iid).then(res =>{
-      // console.log('res',res);
       const data = res.result;
-      // console.log('data',data);
       //1.获取图片轮播数据
       this.topImages = data.itemInfo.topImages
 
@@ -95,22 +112,102 @@ export default {
         this.commentInfo = data.rate.list[0]
       }
     })
+
     //请求推荐数据
     getRecommend().then(res =>{
-      console.log(res);
       this.recommends = res.data.list;
     })
   },
   mounted() {
-    const refresh = debounce(this.$refs.detailScroll.refresh,500)
+    const refresh = debounce(this.$refs.scroll.refresh,500)
+    //监听轮播图是否加载完
     this.$bus.$on('detailSwiperImageLoad',()=>{
+      // console.log('detailSwiperImageLoad');
       refresh()
     })
+    this.$bus.$on('GoodsInfoImageLoad',()=>{
+      refresh()
+      this.detailImageLoad()
+    })
+
   },
+  //获取组件所在的位置
+  //可以在updated中获取值，获取的也不准确，也是因为图片没有加载完毕
+  // updated() {
+  //   this.themTopYs = []
+  //
+  //   this.themTopYs.push(0);
+  //   this.themTopYs.push(this.$refs.param.$el.offsetTop)
+  //   this.themTopYs.push(this.$refs.comment.$el.offsetTop)
+  //   this.themTopYs.push(this.$refs.recommend.$el.offsetTop)
+  //
+  //   console.log(this.themTopYs);
+  // },
   methods:{
     pullingUp(){
 
-    }
+    },
+    titleClick(index){
+      // console.log(index);
+      this.$refs.scroll.scrollTo(0 , -this.themTopYs[index] , 100)
+    },
+    detailImageLoad(){
+      this.themTopYs = []
+
+      this.themTopYs.push(0);
+      this.themTopYs.push(this.$refs.param.$el.offsetTop)
+      this.themTopYs.push(this.$refs.comment.$el.offsetTop)
+      this.themTopYs.push(this.$refs.recommend.$el.offsetTop)
+
+      // console.log(this.themTopYs);
+    },
+    //滚动到一定的位置，detailNavBar中对应的标题就会亮
+    detailScroll(position){
+      // console.log(position.y);
+      let i;
+      let length = this.themTopYs.length
+      for(i = 0; i < length; i++){
+        if((i < length - 1 && -position.y >= this.themTopYs[i] && -position.y <= this.themTopYs[i+1]) || (i === length -1 && -position.y >= this.themTopYs[i])){
+          this.$refs.detailNavBar.currentIndex = i
+        }
+
+        //不能用相等来判断，应该用一段区间的值来判断,并且这里的k不是数组的值，而是下标
+        // if(i < length - 1 && -position.y > this.themTopYs[i] && -position.y < this.themTopYs[i+1]){
+        //   this.$refs.detailNavBar.currentIndex = i
+        // }
+        // else if(this.themTopYs.length - 1 === i){
+        //   this.$refs.detailNavBar.currentIndex = i
+        // }
+      }
+      this.listenShowbackTop(position)
+    },
+    addCarToClick(){
+      // console.log('----');
+      //1.获取购物车需要展示的信息
+      const product = {}
+      product.image = this.topImages[0];
+      product.title = this.goods.title;
+      product.desc = this.goods.desc;
+      product.price = this.goods.realPrice;
+      product.iid = this.iid;
+      //2.将商品添加到购物车里
+      //以下的写法是在mutations里面的写法
+      // this.$store.commit('addCart',product)
+      //actions里的写法如下
+      //如果在vuex中做了某些操作，你想让外面知道你完成了这个操作，
+      //store中的addCart函数要用promise，然后在这里接收返回的promise
+      this.$store.dispatch('addCart',product).then(res=>{
+
+        this.$toast.show(res,2000)
+        // this.toastMessage = res;
+        // this.show = true;
+        // setTimeout(()=>{
+        //   //弹窗显示1.5秒之后消失
+        //   this.show = false;
+        // },1500)
+        // console.log(res);//打印出的结果为promise中的resolve的结果
+      })
+    },
   }
 }
 </script>
@@ -134,6 +231,7 @@ export default {
 /*}*/
 .content{
   /*这个100%是相对于父元素来说的，因此父元素必须要设置高度*/
-  height: calc(100% - 44px);
+  height: calc(100% - 44px - 49px);
 }
+
 </style>

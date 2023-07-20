@@ -29,6 +29,7 @@ export default {
   methods:{
     titleItemClick(index){
       this.currentIndex = index;
+      this.$emit('detailTitleItem',index)
     },
     backprev(){
       //返回上一级

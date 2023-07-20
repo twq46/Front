@@ -32,8 +32,9 @@
         //因为这里每一张图片的加载都会影响高度，而轮播图是只要一张图片
         //加载完成之后轮播图模块高度就已经确定了
         this.counter += 1
-        if(this.counter === this.imageLength)
-        this.$bus.$emit('detailSwiperImageLoad')
+        if(this.counter === this.imageLength){
+          this.$bus.$emit('GoodsInfoImageLoad')
+        }
       }
     },
     watch:{

@@ -9,7 +9,8 @@
             ref="scroll"
             @scroll="backTop"
             :pull-up-load="true"
-            @pullingUp="loadMore" :probe-type="3">
+            @pullingUp="loadMore"
+            :probe-type="3">
       <!--轮播图-->
       <home-swiper :banners="banners" @swiperImageLoading="swiperImageLoad"></home-swiper>
       <!--推荐图-->
@@ -25,7 +26,7 @@
 
     </Scroll>
     <!--监听组件的点击事件需要添加ntive修饰符，否则监听不到-->
-    <BackTop v-show="isBackTopShow" @click.native="backClick"></BackTop>
+    <BackTop v-show="backTopShow" @click.native="backTopClick"></BackTop>
   </div>
 </template>
 
@@ -35,7 +36,6 @@
   import TabControl from "@/components/content/tabControl/TabControl";
   import GoodsList from "@/components/content/goods/GoodsList";
   import Scroll from "@/components/common/scroll/Scroll";
-  import BackTop from "@/components/content/backTop/BackTop";
 
   //子组件
   import HomeSwiper from "./childComps/HomeSwiper";
@@ -46,6 +46,8 @@
   import {getHomeMultidata,getHomeGoods} from "@/network/home";
   import {debounce} from "@/common/utils";
 
+  import {backTopMixin} from "@/common/mixin";
+
   export default {
     //name这个属性也很重要，keep-alive的include和exclude要和这个name属性对应
     name: "home",
@@ -54,7 +56,6 @@
       TabControl,
       GoodsList,
       Scroll,
-      BackTop,
       HomeSwiper,
       RecommendView,
       FeatureView,
@@ -70,12 +71,12 @@
           'sell':{page:0,list:[]},
         },
         currentType:'pop',
-        isBackTopShow:false,
         taboffsetTop:0,
         isTabFixed:false,
         saveY:0,
       }
     },
+    mixins:[backTopMixin],
     computed:{
       showType(){
         return this.goods[this.currentType].list;
@@ -93,16 +94,15 @@
       const refresh = debounce(this.$refs.scroll.refresh,300)
 
       //监听图片是否加载完成
-      this.$bus.$on('imageLoad',()=>{
+      this.$bus.$on('homeImageLoad',()=>{
+        // console.log('homeImageLoad');
         //如果我们直接执行refresh,那么refresh函数会被执行30次
         //可以将refresh函数传入到debounce函数中，生成一个新的函数
         // this.$refs.scroll.scroll.refresh()
         refresh()
       })
     },
-    destroyed(){
-      console.log('home destroy');
-    },
+
     activated() {
       //回到该界面的时候，滚到上次停留的位置
       this.$refs.scroll.scrollTo(0,this.saveY,0)
@@ -132,16 +132,10 @@
         this.$refs.tabcontrol1.currentIndex = index;
         this.$refs.tabcontrol.currentIndex = index;
       },
-      backClick(){
-        //拿到Scroll组件(this.$refs.scroll表示拿到了Scroll对象)中的scroll对象，
-        // 并调用scroll对象对应的scrollTo方法
-        //500是从当前位置回到顶部所需要的时间，单位是毫秒
-        // console.log(this.$refs.scroll.message);
-        this.$refs.scroll.scroll.scrollTo(0,0,300);
-      },
+
       backTop(position){
-        //1.判断BackTop是否显示
-        this.isBackTopShow = (position.y) < -1000
+        // //1.判断BackTop是否显示
+        this.listenShowbackTop(position)
         // console.log(position);
         //2.决定tabControl 是否吸顶(position:fixed)
         this.taboffsetTop = 545;

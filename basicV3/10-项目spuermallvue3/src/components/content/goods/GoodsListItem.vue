@@ -27,7 +27,15 @@
     },
     methods:{
       imgLoad(){
-        this.$bus.$emit('imageLoad')
+        //因为在detail界面中的推荐数据也是显示的goodlist的数据，因此这里需要判断
+        //是哪个组件的图片加载完成
+
+        if(!this.$route.path.indexOf('/home')){
+          this.$bus.$emit('homeImageLoad')
+        } else if(!this.$route.path.indexOf('/detail')){
+          this.$bus.$emit('detailImageLoad')
+        }
+
       },
       itemClick(){
         // console.log(111,this.goodItem);

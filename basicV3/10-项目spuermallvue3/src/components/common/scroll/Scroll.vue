@@ -12,8 +12,10 @@ import BScroll from "better-scroll";
 export default {
   name: "Scroll",
   props:{
-    probeType:Number,
-    default:0,
+    probeType:{
+      type:Number,
+      default:0,
+    },
     pullUpLoad:Boolean,
   },
   data(){
@@ -50,7 +52,7 @@ export default {
   methods:{
     scrollTo(x,y,time=300){
       //先判断scroll这个对象是否存在，在调用其中的方法，这样写比较严谨
-      this.scroll && this.scroll.scrollTo(x,y,time)
+      this.scroll.scrollTo(x,y,time)
     },
     refresh(){
       this.scroll.refresh()
